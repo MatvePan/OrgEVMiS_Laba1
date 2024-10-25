@@ -1,0 +1,4 @@
+﻿  OrgEVM1.cpp
+C:\Users\Matvey\Desktop\ОргЭВМиС\OrgEVM1\OrgEVM1.cpp(32,14): warning C4101: lonbit: неиспользованная локальная переменная
+C:\Users\Matvey\Desktop\ОргЭВМиС\OrgEVM1\OrgEVM1.cpp(32,6): warning C4101: unibit: неиспользованная локальная переменная
+  OrgEVM1.vcxproj -> C:\Users\Matvey\Desktop\ОргЭВМиС\OrgEVM1\x64\Debug\OrgEVM1.exe
