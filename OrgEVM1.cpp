@@ -1,9 +1,13 @@
 ﻿#include "iostream"
 #include "limits"
-#include <cmath>
-#include <limits>
+#include "string"
 using namespace std;
 // Вариант 15: unsigned int и long double
+
+union UniInt {
+	unsigned int unit;
+	unsigned char bit[sizeof(unsigned int)];
+};
 
 void UniIntBinaryTranslate(unsigned int number) {
 	int size = sizeof(unsigned int)*8;
@@ -28,43 +32,26 @@ void LonDueBinaryTranslate(long double number) {
 	cout << endl;
 }
 
-unsigned int ShiftUniInt(unsigned int& uniint, int shift, int little, bool arrow, int bits) {
-	unsigned int mask = ((1u << bits) - 1) << little;
-	unsigned int cage = (uniint & mask) >> little;
-	if (arrow) {
-		cage = ((cage << shift) | (cage >> (bits - shift))) & ((1u << bits) - 1);
-	}
-	else {
-		cage = ((cage >> shift) | (cage << (bits - shift))) & ((1u << bits) - 1);
-	}
-	uniint &= ~mask;
-	uniint |= (cage << little);
+unsigned int ShiftUniInt(unsigned int uniint) {
+	
 	return uniint;
 }
 
-long double ShiftLonDue(long double& londue, int shift, int little, bool arrow, int bits) {
-	uint64_t* p = reinterpret_cast<uint64_t*>(&londue);
-	uint64_t mask = (1ull << bits) - 1;
-	uint64_t bit = (*p >> little) & mask;
-	if (arrow) {
-		bit = (bit << shift) | (bit >> (little - shift));
-	}
-	else {
-		bit = (bit >> shift) | (bit << (little - shift));
-	}
-	*p = (*p & ~(mask << little)) | (bit << little);
+long double ShiftLonDue(long double londue) {
+	
 	return londue;
 }
 
 int main() {
 	setlocale(LC_ALL, "RU");
-	unsigned int uniint, newint;
-	long double londue, newdouble;
-	int shift, little, bits;
-	int arrow;
+	unsigned int uniint;
+	long double londue;
+	int shift, littleint, littledouble;
+	bool left;
+	string arrow;
 	cout << "Введите число типа unsigned int\n";
 	cin >> uniint;
-	cout << "Введите чисор типа long double\n";
+	cout << "Введите число типа long double\n";
 	cin >> londue;
 	cout << "\n";
 	cout << "Двоичное представление unsigned int:\n";
@@ -77,21 +64,19 @@ int main() {
 	// Выполнить циклический сдвиг в заданную пользователем сторону на некоторое количество разрядов в пределах определённой группы разрядов, количество которых и номер младшего разряда в группе задаются с клавиатуры
 	cout << "Введите количество разрядов для сдвига:\n";
 	cin >> shift;
-	cout << "Введите младший разряд:\n";
-	cin >> little;
-	cout << "Введите количество битов (0-15):\n";
-	cin >> bits;
+	cout << "Введите младший разряд для unsigned int (0-31):\n";
+	cin >> littleint;
+	cout << "Введите младший разряд для long double (0-79):\n";
+	cin >> littledouble;
 	cout << "Введите сторону сдвига:\n";
-	cout << "1 - влево, 2 - вправо\n";
+	cout << "l - влево, r - вправо\n";
 	cin >> arrow;
-	if (arrow != 1 or arrow != 2) {
+	if (arrow == "l" or arrow == "left")
+		left = true;
+	else if (arrow == "r" or arrow == "right")
+		left = false;
+	else
 		return 1;
-	}
-	bool boshiftleft = (arrow == 1);
-	newint = ShiftUniInt(uniint, shift, little, boshiftleft, bits);
-	newdouble = ShiftLonDue(londue, shift, little, boshiftleft, bits);
 	cout << "Преобразованное число типа unsigned int\n";
-	cout << newint << "\n";
 	cout << "Преобразованное число типа long double\n";
-	cout << newdouble << "\n";
 }
